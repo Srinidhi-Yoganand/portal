@@ -1,10 +1,6 @@
 site_name: PIPE Team Maersk
 site_url: https://Srinidhi-Yoganand.github.io/portal/
 site_description: Maersk DevOps Team Documentation
-site_dir: site
-use_directory_urls: true
-repo_url: https://github.com/Srinidhi-Yoganand/portal/
-repo_name: Maersk/PIPE
 
 extra:
   base_url: /portal/
@@ -37,19 +33,6 @@ theme:
 extra_css:
   - styles/extra.css
 
-assets:
-  - logo: assets/logo.png
-  - favicon: assets/favicon.png
-
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/Srinidhi-Yoganand
-    - icon: fontawesome/brands/linkedin
-      link: https://linkedin.com/company/logitech
-    - icon: fontawesome/brands/slack
-      link: https://logitech.slack.com
-
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
@@ -57,6 +40,9 @@ nav:
   - Infrastructure: infrastructure.md
   - Monitoring: monitoring.md
   - Best Practices: best-practices.md
+
+repo_url: https://github.com/Srinidhi-Yoganand/portal/
+repo_name: Srinidhi-Yoganand/portal  
 
 markdown_extensions:
   - attr_list
