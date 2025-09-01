@@ -25,7 +25,10 @@ jobs:
         pip install mkdocs mkdocs-material
     
     - name: Build site
-      run: mkdocs build --site-dir site
+      run: |
+        mkdocs build --verbose
+        # Test if the site looks correct locally after build
+        python -m http.server -d site 8000 &
     
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
@@ -33,3 +36,5 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./site
+        # Force push to avoid conflicts
+        force_orphan: true
