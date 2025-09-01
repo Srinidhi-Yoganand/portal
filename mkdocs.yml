@@ -42,7 +42,7 @@ nav:
   - Best Practices: best-practices.md
 
 repo_url: https://github.com/Srinidhi-Yoganand/portal/
-repo_name: Srinidhi-Yoganand/portal  
+repo_name: Srinidhi-Yoganand/portal
 
 markdown_extensions:
   - attr_list
