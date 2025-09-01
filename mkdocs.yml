@@ -1,6 +1,7 @@
 site_name: PIPE Team Maersk
-site_url: https://docs.logitech.dev
-repo_url: https://github.com/Maersk/PIPE
+site_url: https://Srinidhi-Yoganand.github.io/portal/
+site_description: Maersk DevOps Team Documentation
+repo_url: https://github.com/Srinidhi-Yoganand/portal/
 repo_name: Maersk/PIPE
 
 theme:
