@@ -33,6 +33,9 @@ theme:
 extra_css:
   - styles/extra.css
 
+extra_javascript:
+  - assets/chatbot.js
+
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
