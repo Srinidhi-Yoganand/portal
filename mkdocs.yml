@@ -34,7 +34,7 @@ extra_css:
   - styles/extra.css
 
 extra_javascript:
-  - assets/chatbot.js
+  - assets/dify-chatbot.js
 
 nav:
   - Home: index.md
