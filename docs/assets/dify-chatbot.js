@@ -1,10 +1,10 @@
-// Dify chatbot configuration
+// Dify config
 window.difyChatbotConfig = {
     token: 'zGg2ydIBkLV7wekK',
     baseUrl: 'https://dify.dev.maersk-digital.net'
 };
 
-// Custom styling for the Dify chatbot
+// custom styling
 const customStyles = `
     <style>
         #dify-chatbot-bubble-button {
@@ -17,20 +17,18 @@ const customStyles = `
     </style>
 `;
 
-// Add custom styles to the document
 document.head.insertAdjacentHTML('beforeend', customStyles);
 
-// Reset any existing widget and (re)load the Dify chatbot script
 (function reloadDifyWidget() {
-	// Remove previous script (same id) if present
+	
 	const existingScript = document.getElementById('zGg2ydIBkLV7wekK');
 	if (existingScript && existingScript.parentNode) existingScript.parentNode.removeChild(existingScript);
 
-	// Remove any previously injected widget containers (without opening/closing)
+	
 	document.querySelectorAll('[id^="dify-chatbot"]').forEach(el => el.remove());
 	document.querySelectorAll('#dify-chatbot-bubble-button, #dify-chatbot-bubble-window').forEach(el => el.remove());
 
-	// Optionally clear stale local/session storage keys used by the widget
+	
 	try {
 		const shouldDelete = (k) => {
 			if (!k) return false;
@@ -47,13 +45,12 @@ document.head.insertAdjacentHTML('beforeend', customStyles);
 		}
 	} catch (_) { /* ignore */ }
 
-	// Re-inject script fresh
+	
 	const s = document.createElement('script');
 	s.src = 'https://dify.dev.maersk-digital.net/embed.min.js';
 	s.id = 'zGg2ydIBkLV7wekK';
 	s.defer = true;
 
-	// No auto-opening/closing; rely on fresh injection + cleared storage only
 
 	document.head.appendChild(s);
 })();
