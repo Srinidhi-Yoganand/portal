@@ -3,7 +3,7 @@
 <div class="hero-section">
 <div class="hero-content">
 
-## Streamlining Global Logistics Through DevOps Excellence
+<h1>Streamlining Global Logistics Through DevOps Excellence</h1>
 
 Our comprehensive documentation portal provides everything you need to build, deploy, and maintain our global logistics infrastructure.
 

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mkdocs-site
+  namespace: central-test
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mkdocs-site
+
+  template:
+    metadata:
+      labels:
+        app: mkdocs-site   
+    spec:
+      containers:
+        - name: mkdocs-site
+          image: placeholder-image:tag  
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: mkdocs-site-service
+  namespace: central-test
+
+spec:
+  selector:
+    app: mkdocs-site
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

@@ -1,0 +1,77 @@
+name: MkDocs Docker Build & Deploy to AKS
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**'
+  workflow_dispatch:
+
+env:
+  ACR_NAME: acrazewdmlns001scmshard
+  IMAGE_NAME: mkdocs-site
+  K8S_NAMESPACE: central-test
+  AKS_CLUSTER_NAME: aks-az-test-ind-central
+  RESOURCE_GROUP: default-group
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.docker-tag.outputs.tag }}
+      image-full-name: ${{ steps.docker-tag.outputs.full_image }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set Docker image tag
+        id: docker-tag
+        run: |
+          TAG=${GITHUB_SHA::6}
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "full_image=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:$TAG" >> $GITHUB_OUTPUT
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.docker-tag.outputs.tag }} .
+
+      - name: Push Docker image to ACR
+        run: |
+          docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.docker-tag.outputs.tag }}
+
+  deploy-to-aks:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.AKS_CLUSTER_NAME }}
+
+      - name: Set image in deployment manifest
+        run: |
+          IMAGE=${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.image-tag }}
+          echo "Using image: $IMAGE"
+          sed -i "s|image: .*|image: $IMAGE|g" .devops/k8s/deployment.yaml
+
+      - name: Deploy to AKS
+        run: |
+          kubectl apply -n ${{ env.K8S_NAMESPACE }} -f .devops/k8s/deployment.yaml
+          kubectl rollout status deployment/mkdocs-site -n ${{ env.K8S_NAMESPACE }}
